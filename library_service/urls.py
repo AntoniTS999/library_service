@@ -17,9 +17,16 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
+from borrowings.views import BorrowingViewSet
+from books.views import BookViewSet
+
+router = DefaultRouter()
+
+router.register("books", BookViewSet)
+router.register("borrowings", BorrowingViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("library_service/", include("books.urls", namespace="books")),
-    path("library_service/", include("borrowings.urls", namespace="borrowings")),
+    path("library_service/", include(router.urls)),
 ]

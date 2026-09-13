@@ -13,5 +13,9 @@ class Borrowing(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="borrowings"
     )
 
+    @property
+    def is_active(self):
+        return self.actual_return_date is None
+
     def __str__(self):
         return f"User: {self.user.id} borrowed book: {self.book.id} for period from: {self.borrow_date} to: {self.expected_return_date}"

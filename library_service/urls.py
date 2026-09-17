@@ -21,11 +21,13 @@ from rest_framework.routers import DefaultRouter
 
 from borrowings.views import BorrowingViewSet
 from books.views import BookViewSet
+from payments.views import PaymentViewSeT
 
 router = DefaultRouter()
 
 router.register("books", BookViewSet)
 router.register("borrowings", BorrowingViewSet)
+router.register("payments", PaymentViewSeT)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("library_service/", include(router.urls)),

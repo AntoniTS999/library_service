@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Q, F
+from django.db.models.constraints import CheckConstraint
 
 from books.models import Book
 
@@ -16,6 +18,19 @@ class Borrowing(models.Model):
     @property
     def is_active(self):
         return self.actual_return_date is None
+
+    class Meta:
+        constraints = [
+            CheckConstraint(
+                condition=Q(expected_return_date__gte=F("borrow_date")),
+                name="expected_return_after_borrow",
+            ),
+            CheckConstraint(
+                condition=Q(actual_return_date__gte=F("borrow_date"))
+                | Q(actual_return_date__isnull=True),
+                name="actual_return_after_borrow",
+            ),
+        ]
 
     def __str__(self):
         return f"User: {self.user.id} borrowed book: {self.book.id} for period from: {self.borrow_date} to: {self.expected_return_date}"

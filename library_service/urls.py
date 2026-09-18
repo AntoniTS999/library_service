@@ -31,4 +31,5 @@ router.register("payments", PaymentViewSeT)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("library_service/", include(router.urls)),
+    path("library_service/user/", include("user.urls", namespace="user")),
 ]

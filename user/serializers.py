@@ -7,7 +7,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = [
             "id",
-            "username",
             "email",
             "password",
             "first_name",
@@ -19,6 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
             "password": {
                 "write_only": True,
                 "min_length": 6,
+                "style": {"input_type": "password"},
             },
         }
 

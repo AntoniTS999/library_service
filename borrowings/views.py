@@ -9,7 +9,6 @@ class BorrowingViewSet(
     GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin
 ):
     queryset = Borrowing.objects.all()
-    serializer_class = BorrowingSerializer
 
     def get_queryset(self):
         return Borrowing.objects.filter(user=self.request.user)

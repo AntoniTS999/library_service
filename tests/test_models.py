@@ -5,7 +5,6 @@ from django.utils.deprecation import django_file_prefixes
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 
-import user
 from books.models import Book
 from borrowings.models import Borrowing
 
@@ -17,12 +16,11 @@ class ModelTestStr(APITestCase):
         self.book = Book.objects.create(
             title="Test Book",
             author="Test Author",
-            cover="Test Cover",
-            inventory="5",
+            cover="hard",
+            inventory=5,
             daily_fee=10,
         )
         self.user = get_user_model().objects.create_user(
-            username="test",
             email="test@test.com",
             password="123456789",
         )

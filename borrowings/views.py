@@ -1,4 +1,5 @@
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
 from borrowings.models import Borrowing
@@ -9,6 +10,7 @@ class BorrowingViewSet(
     GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin
 ):
     queryset = Borrowing.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Borrowing.objects.filter(user=self.request.user)

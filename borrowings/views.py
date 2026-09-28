@@ -20,7 +20,7 @@ class BorrowingViewSet(
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = self.queryset.all()
+        queryset = self.queryset.all().select_related("book", "user")
         is_active_filter = self.request.query_params.get("is_active")
         user_id = self.request.query_params.get("user_id")
         if is_active_filter and is_active_filter.lower() in ("true", "1"):

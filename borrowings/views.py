@@ -11,7 +11,8 @@ from rest_framework.viewsets import GenericViewSet
 from books.models import Book
 from borrowings.models import Borrowing
 from borrowings.serializers import BorrowingSerializer, CreateBorrowingSerializer
-from notifications.telegram import send_telegram_message
+from borrowings.notifications.telegram import send_telegram_message
+
 
 class BorrowingViewSet(
     GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin

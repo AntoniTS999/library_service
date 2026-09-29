@@ -11,7 +11,7 @@ from rest_framework.viewsets import GenericViewSet
 from books.models import Book
 from borrowings.models import Borrowing
 from borrowings.serializers import BorrowingSerializer, CreateBorrowingSerializer
-
+from notifications.telegram import send_telegram_message
 
 class BorrowingViewSet(
     GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin
@@ -60,4 +60,16 @@ class BorrowingViewSet(
             return BorrowingSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        borrowing = serializer.save(user=self.request.user)
+        self._notify_new_borrowing(borrowing)
+
+    @staticmethod
+    def _notify_new_borrowing(borrowing):
+        message = (
+            f"📚 *New borrowing created*\n"
+            f"Book: {borrowing.book.title}\n"
+            f"User: {borrowing.user.email}\n"
+            f"Borrow date: {borrowing.borrow_date}\n"
+            f"Expected return: {borrowing.expected_return_date}"
+        )
+        send_telegram_message(message)

@@ -18,7 +18,7 @@ def send_telegram_message(text: str) -> bool:
         )
         return False
 
-    url = TELEGRAM_API_URL.format(token=bot_token)
+    url = TELEGRAM_API_URL.format(bot_token=bot_token)
     payload = {
         "chat_id": chat_id,
         "text": text,

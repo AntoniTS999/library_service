@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "borrowings",
     "payments",
     "rest_framework",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [

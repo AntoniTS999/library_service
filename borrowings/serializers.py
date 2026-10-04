@@ -6,9 +6,12 @@ from rest_framework.exceptions import ValidationError
 from books.models import Book
 from borrowings.models import Borrowing
 from payments.helper import create_stripe_session
+from payments.serializers import PaymentSerializer
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
+    payments = PaymentSerializer(read_only=True, many=True)
+
     class Meta:
         model = Borrowing
         fields = [
@@ -19,6 +22,7 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "book",
             "user",
             "is_active",
+            "payments",
         ]
         read_only_fields = [
             "id",

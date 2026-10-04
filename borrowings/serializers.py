@@ -5,6 +5,7 @@ from rest_framework.exceptions import ValidationError
 
 from books.models import Book
 from borrowings.models import Borrowing
+from payments.helper import create_stripe_session
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
@@ -51,5 +52,6 @@ class CreateBorrowingSerializer(serializers.ModelSerializer):
                 raise ValidationError({"book": "Inventory must be greater than 0"})
 
             borrowing = Borrowing.objects.create(**validated_data)
+            create_stripe_session(borrowing)
 
         return borrowing

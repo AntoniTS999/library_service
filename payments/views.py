@@ -11,10 +11,10 @@ import stripe
 from django.conf import settings
 from rest_framework.decorators import action
 
-stripe.api_key = settings.STRIPE_API_KEY
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-class PaymentViewSeT(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+class PaymentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     permission_classes = [IsAuthenticated]

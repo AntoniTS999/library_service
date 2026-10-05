@@ -1,17 +1,17 @@
 import stripe
-from django.conf import settings
-
+from django.urls import reverse
 from payments.models import Payment
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
-DEFAULT_SUCCESS_URL = "http://localhost:8000/payments/success/"
-DEFAULT_CANCEL_URL = "http://localhost:8000/payments/cancel/"
-
-
-def create_stripe_session(borrowing):
+def create_stripe_session(borrowing, request):
 
     total_price = _calculate_total_price(borrowing)
+
+    success_url = (
+        request.build_absolute_uri(reverse("payment-success"))
+        + "?session_id={CHECKOUT_SESSION_ID}"
+    )
+    cancel_url = request.build_absolute_uri(reverse("payment-cancel"))
 
     session = stripe.checkout.Session.create(
         line_items=[
@@ -27,8 +27,8 @@ def create_stripe_session(borrowing):
             }
         ],
         mode="payment",
-        success_url=DEFAULT_SUCCESS_URL,
-        cancel_url=DEFAULT_CANCEL_URL,
+        success_url=success_url,
+        cancel_url=cancel_url,
     )
 
     return Payment.objects.create(

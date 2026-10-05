@@ -46,6 +46,7 @@ class CreateBorrowingSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         book = validated_data["book"]
+        request = self.context.get("request")
 
         with transaction.atomic():
             updated = Book.objects.filter(id=book.id, inventory__gt=0).update(
@@ -56,6 +57,6 @@ class CreateBorrowingSerializer(serializers.ModelSerializer):
                 raise ValidationError({"book": "Inventory must be greater than 0"})
 
             borrowing = Borrowing.objects.create(**validated_data)
-            create_stripe_session(borrowing)
+            create_stripe_session(borrowing, request)
 
         return borrowing

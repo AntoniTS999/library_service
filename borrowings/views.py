@@ -12,6 +12,7 @@ from books.models import Book
 from borrowings.models import Borrowing
 from borrowings.serializers import BorrowingSerializer, CreateBorrowingSerializer
 from borrowings.notifications.telegram import send_telegram_message
+from payments.helper import create_fine_session
 
 
 class BorrowingViewSet(
@@ -52,6 +53,10 @@ class BorrowingViewSet(
             )
 
         borrowing.refresh_from_db()
+
+        if borrowing.actual_return_date > borrowing.expected_return_date:
+            create_fine_session(borrowing, request)
+
         return Response(self.get_serializer(borrowing).data)
 
     def get_serializer_class(self):

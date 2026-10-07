@@ -9,6 +9,8 @@ User = get_user_model()
 
 
 class BookViewSetTests(APITestCase):
+    """Tests CRUD for book model"""
+
     def setUp(self):
         self.user = User.objects.create_user(email="user@test.com", password="pass123")
         self.staff = User.objects.create_user(

@@ -28,4 +28,3 @@ class UserModelTests(APITestCase):
 
         user = User.objects.create_user(email="user@test.com", password="pass123")
         self.assertEqual(str(user), "user@test.com")
-

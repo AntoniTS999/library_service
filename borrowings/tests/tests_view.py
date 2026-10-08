@@ -34,6 +34,8 @@ class BorrowingCreateViewTests(APITestCase):
 
     @patch("payments.helper.stripe.checkout.Session.create")
     def test_create_borrowing_success(self, mock_create):
+        """Test if creating a borrowing is working correctly"""
+
         mock_create.return_value = mock_stripe_session()
 
         url = reverse("borrowing-list")
@@ -48,6 +50,8 @@ class BorrowingCreateViewTests(APITestCase):
         self.assertEqual(self.book.inventory, 1)
 
     def test_create_borrowing_out_of_stock(self):
+        """Test if borrowing impossible when book is out of stock"""
+
         self.book.inventory = 0
         self.book.save()
 
@@ -60,6 +64,7 @@ class BorrowingCreateViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_borrowing_unauthenticated(self):
+        """Test if creating a borrowing with an unauthenticated user fails"""
         self.client.force_authenticate(user=None)
         url = reverse("borrowing-list")
         response = self.client.post(url, {})

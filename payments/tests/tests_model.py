@@ -28,6 +28,8 @@ class PaymentModelTests(APITestCase):
         )
 
     def test_payment_creation(self):
+        """Test payment creation"""
+
         payment = Payment.objects.create(
             status=Payment.StatusChoices.PENDING,
             type=Payment.TypeChoices.PAYMENT,
@@ -40,6 +42,8 @@ class PaymentModelTests(APITestCase):
         self.assertEqual(payment.borrowing, self.borrowing)
 
     def test_payment_default_status_is_pending(self):
+        """Test payment creation with default status"""
+
         payment = Payment.objects.create(
             type=Payment.TypeChoices.PAYMENT,
             borrowing=self.borrowing,
@@ -48,16 +52,6 @@ class PaymentModelTests(APITestCase):
             money_to_pay=20.00,
         )
         self.assertEqual(payment.status, Payment.StatusChoices.PENDING)
-
-    def test_borrowing_related_name_payments(self):
-        Payment.objects.create(
-            status=Payment.StatusChoices.PENDING,
-            type=Payment.TypeChoices.PAYMENT,
-            borrowing=self.borrowing,
-            session_url="https://checkout.stripe.com/fake",
-            session_id="cs_test_fake",
-            money_to_pay=20.00,
-        )
         self.assertEqual(self.borrowing.payments.count(), 1)
 
     def test_payment_deleted_when_borrowing_deleted(self):

@@ -11,6 +11,6 @@ COPY . /code/
 
 RUN adduser \
     --disabled-password \
-    django-user \
+    django-user
 
 USER django-user

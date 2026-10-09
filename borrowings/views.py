@@ -14,7 +14,41 @@ from borrowings.serializers import BorrowingSerializer, CreateBorrowingSerialize
 from borrowings.notifications.telegram import send_telegram_message
 from payments.helper import create_fine_session
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="List borrowings",
+        description=(
+            "Returns borrowings for the current user. Admin users see all "
+            "borrowings unless filtered by user_id."
+        ),
+        parameters=[
+            OpenApiParameter(
+                name="is_active",
+                type=OpenApiTypes.BOOL,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter by active borrowings (not yet returned). "
+                    "true = only active (actual_return_date is null)."
+                ),
+                required=False,
+            ),
+            OpenApiParameter(
+                name="user_id",
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Admin only. Filter borrowings by a specific user's ID. "
+                    "If omitted, admin sees borrowings for all users."
+                ),
+                required=False,
+            ),
+        ],
+    )
+)
 class BorrowingViewSet(
     GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin
 ):

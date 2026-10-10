@@ -3,7 +3,7 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from payments.models import Payment
 from payments.serializers import PaymentSerializer
 
@@ -14,6 +14,24 @@ from rest_framework.decorators import action
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="List user payments",
+        description=(
+            "Retrieve Stripe transaction history. Regular users see only "
+            "their own payment logs, while Admins see all platform "
+            "financial logs."
+        ),
+    ),
+    retrieve=extend_schema(
+        summary="Get payment details",
+        description=(
+            "Retrieve detailed information regarding a payment transaction, "
+            "its status, amount, and corresponding Stripe checkout URLs."
+        ),
+    ),
+)
+@extend_schema(tags=["Stripe Payments"])
 class PaymentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer

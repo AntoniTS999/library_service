@@ -355,3 +355,6 @@ pyrightconfig.json
 
 #stripe test dev
 stripe_test.py
+
+#db service/local
+data/
